@@ -194,6 +194,10 @@ details p { padding-top:.5rem; }
 .research-nav a[aria-current="page"] { background:var(--accent-dark); color:white; border-color:var(--accent-dark); }
 [data-research-panel="talks"] .selected-talks { margin-top:0; padding-top:0; border-top:0; }
 @media print { .research-nav { display:none; } }
+.cv-page { padding-block:1.5rem; }
+.cv-page .page-heading { margin-bottom:1rem; }
+.cv-pdf-viewer { display:block; width:100%; height:calc(100vh - 240px); height:calc(100dvh - 240px); min-height:400px; border:1px solid var(--line); background:#f5f5f5; }
+.cv-fallback { margin-top:.6rem; font-size:.85rem; }
 </style>
   <script type="application/ld+json">
     {
@@ -211,7 +215,7 @@ details p { padding-top:.5rem; }
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap header-inner">
-<nav class="main-nav" aria-label="Main navigation"><ul><li><a href="#about" aria-current="page">Home</a></li><li><a href="#research">Research</a></li><li><a href="#teaching">Teaching</a></li><li><a id="cv-pdf-link" href="assets/Matias-Ruiz-CV.pdf" target="_blank" rel="noopener" aria-label="CV (PDF)">CV</a></li><li><a href="#get-in-touch">Get in touch</a></li></ul></nav>
+<nav class="main-nav" aria-label="Main navigation"><ul><li><a href="#about" aria-current="page">Home</a></li><li><a href="#research">Research</a></li><li><a href="#teaching">Teaching</a></li><li><a id="cv-pdf-link" href="#cv">CV</a></li><li><a href="#get-in-touch">Get in touch</a></li></ul></nav>
 <a class="leicester-logo" href="https://le.ac.uk/" aria-label="University of Leicester">
         <svg width="255" height="68" viewBox="0 0 255 68" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid meet" alt="University of Leicester Logo" role="none">
             <path d="M0 0V36.8993C0 51.7348 26.708 67.7045 27.2005 68C27.6932 67.7045 54.401 51.7348 54.401 36.8993V0H0ZM51.9143 36.8993C51.9143 46.9961 36.4257 59.295 27.2005 65.082C17.9747 59.2971 2.48674 47.001 2.48674 36.8993V2.48696H51.9143V36.8993Z" fill="currentColor" />
@@ -414,7 +418,11 @@ details p { padding-top:.5rem; }
         <h3 class="subheading">Postgraduate research</h3>
         <p>As PGR Tutor for Mathematics, I support doctoral students through induction and progression. I also represent Leicester in <a href="https://maths-magic.ac.uk/people">MAGIC</a>, the consortium providing online postgraduate mathematics courses.</p></div>
 </section>
-<!-- CV: assembled from the existing verified website content. -->
+<section class="wrap page cv-page" id="page-cv" data-page="cv" aria-labelledby="cv-title" hidden>
+  <div class="page-heading"><h1 id="cv-title" tabindex="-1">CV</h1><a href="assets/Matias-Ruiz-CV.pdf" download>Download PDF ↓</a></div>
+  <iframe class="cv-pdf-viewer" src="assets/Matias-Ruiz-CV.pdf#view=FitH" title="Matias Ruiz — curriculum vitae (PDF)"></iframe>
+  <p class="cv-fallback">If the PDF does not display, <a href="assets/Matias-Ruiz-CV.pdf">open the PDF directly</a>.</p>
+</section>
 <section class="wrap page" id="page-get-in-touch" data-page="get-in-touch" aria-labelledby="get-in-touch-title" hidden>
   <div class="page-heading"><h1 id="get-in-touch-title" tabindex="-1">Get in touch</h1></div>
   <p class="page-lead">I am happy to supervise PhD students. Please get in touch if you are interested.</p>
@@ -433,7 +441,7 @@ details p { padding-top:.5rem; }
   'use strict';
   const pages = Array.from(document.querySelectorAll('[data-page]'));
   const links = Array.from(document.querySelectorAll('.main-nav a'));
-  const pageTitles = { about: 'Home', research: 'Research', teaching: 'Teaching', 'get-in-touch': 'Get in touch' };
+  const pageTitles = { about: 'Home', research: 'Research', teaching: 'Teaching', cv: 'CV', 'get-in-touch': 'Get in touch' };
   const researchPanels = Array.from(document.querySelectorAll('[data-research-panel]'));
   const researchLinks = Array.from(document.querySelectorAll('[data-research-tab]'));
   const researchTitles = { 'current-focus': 'Interests', publications: 'Publications', talks: 'Talks' };
@@ -441,7 +449,6 @@ details p { padding-top:.5rem; }
   function render() {
     const parts = location.hash.slice(1).split('/');
     if (parts[0] === 'publications') { parts[0] = 'research'; parts[1] = 'publications'; }
-    if (parts[0] === 'cv') { location.assign('assets/Matias-Ruiz-CV.pdf'); return; }
     if (parts[0] === 'main') { document.getElementById('main').focus(); return; }
     const page = Object.hasOwn(pageTitles, parts[0]) ? parts[0] : 'about';
     pages.forEach(element => { element.hidden = element.dataset.page !== page; });
